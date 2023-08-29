@@ -1,14 +1,14 @@
 const TelegramBot = require("node-telegram-bot-api");
 const axios = require("axios");
+require("dotenv").config();
 
 // Set your Telegram Bot API token and OpenAI API key
-const telegramToken = "6166135441:AAEFhDtO8dT5ctXj03xZZjgnU8wcQ9cgfco";
-const openaiKey = "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";
+const telegramToken = process.env.BOT_KEY;
+const openaiKey = process.env.OPENAI_KEY;
 
 const bot = new TelegramBot(telegramToken, { polling: true });
-console.log("chl rha h ??");
+
 bot.onText(/\/start/, (msg) => {
-  console.log("telegram");
   const chatId = msg.chat.id;
   bot.sendMessage(chatId, "Hi");
 });
