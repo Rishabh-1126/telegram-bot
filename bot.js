@@ -3,7 +3,7 @@ const axios = require("axios");
 
 // Set your Telegram Bot API token and OpenAI API key
 const telegramToken = "6166135441:AAEFhDtO8dT5ctXj03xZZjgnU8wcQ9cgfco";
-const openaiKey = "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";
+const openaiKey = "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";
 
 const bot = new TelegramBot(telegramToken, { polling: true });
 console.log("chl rha h ??");
