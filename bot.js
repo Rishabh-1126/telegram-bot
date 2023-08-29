@@ -1,19 +1,19 @@
 const TelegramBot = require("node-telegram-bot-api");
 const axios = require("axios");
-const SingleInstance = require("single-instance");
+const fs = require("fs");
 require("dotenv").config();
 
 const telegramToken = process.env.BOT_KEY;
 const openaiKey = process.env.OPENAI_KEY;
 
-// Create a new single instance
-const instance = new SingleInstance("telegram-bot-instance");
-
-// Check if this instance is primary (first to start)
-if (!instance.isPrimaryInstance()) {
+// Check if lock file exists
+if (fs.existsSync("bot.lock")) {
   console.log("Another instance is already running.");
   process.exit(0);
 }
+
+// Create lock file
+fs.writeFileSync("bot.lock", "");
 
 const bot = new TelegramBot(telegramToken, { polling: true });
 
@@ -46,4 +46,10 @@ bot.on("message", async (msg) => {
     console.error(error);
     bot.sendMessage(chatId, "An error occurred.");
   }
+});
+
+// Remove lock file when the bot is stopped
+process.on("SIGINT", () => {
+  fs.unlinkSync("bot.lock");
+  process.exit();
 });
