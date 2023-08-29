@@ -1,10 +1,19 @@
 const TelegramBot = require("node-telegram-bot-api");
 const axios = require("axios");
+const SingleInstance = require("single-instance");
 require("dotenv").config();
 
-// Set your Telegram Bot API token and OpenAI API key
 const telegramToken = process.env.BOT_KEY;
 const openaiKey = process.env.OPENAI_KEY;
+
+// Create a new single instance
+const instance = new SingleInstance("telegram-bot-instance");
+
+// Check if this instance is primary (first to start)
+if (!instance.isPrimaryInstance()) {
+  console.log("Another instance is already running.");
+  process.exit(0);
+}
 
 const bot = new TelegramBot(telegramToken, { polling: true });
 
